@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Driving;
+import frc.robot.commands.AimAndDriveCommand;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.commands.SubsystemCommands;
 import frc.robot.subsystems.VerticalFeeder;
@@ -27,6 +28,8 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import frc.robot.util.SwerveTelemetry;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,17 +52,12 @@ public class RobotContainer {
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController operator = new CommandXboxController(1);
 
-   /*  private final AutoRoutines autoRoutines = new AutoRoutines(
+    private final AimAndDriveCommand aimAndDriveCommands = new AimAndDriveCommand(
         swerve,
-        intake,
-        floor,
-        feeder,
-        shooter,
-        hood,
-        hanger,
-        limelight
+        forwardInput,
+        leftInput
      );
-     */
+     
     private final SubsystemCommands subsystemCommands = new SubsystemCommands(
         swerve,
         intake,
@@ -74,6 +72,19 @@ public class RobotContainer {
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+      
+       // Subsystem initialization
+        swerve = new Swerve();
+        intake = new Intake();
+        
+
+      
+
+        // Register Named Commands
+        NamedCommands.registerCommand("intake", intake.intakeCommand());
+        NamedCommands.registerCommand("aimAndShoot", subsystemCommands.aimAndDriveCommand());
+        NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+
         configureBindings();
        //  autoRoutines.configure();
         swerve.registerTelemetry(swerveTelemetry::telemeterize);
