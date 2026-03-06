@@ -76,7 +76,8 @@ public final class SubsystemCommands {
             aimAndDriveCommand,
             Commands.waitSeconds(0.25)
                 .andThen(prepareShotCommand),
-            Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
+            //Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
+            Commands.waitSeconds(5)
                 .andThen(feed())
         );
     }
@@ -92,7 +93,7 @@ public final class SubsystemCommands {
             Commands.waitSeconds(0.25),
             Commands.parallel(
                 verticalfeeder.feedCommand(),
-                Commands.waitSeconds(0.125)
+                Commands.waitSeconds(0.5)
                     .andThen(hopper.feedCommand().alongWith(intake.agitateCommand()))
             )
         );

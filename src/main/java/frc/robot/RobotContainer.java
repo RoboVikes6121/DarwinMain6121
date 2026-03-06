@@ -20,6 +20,10 @@ import frc.robot.commands.AimAndDriveCommand;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.commands.SubsystemCommands;
 import frc.robot.subsystems.VerticalFeeder;
+import frc.robot.tannersCommands.TannersClimberExtend;
+import frc.robot.tannersCommands.TannersClimberRetract;
+import frc.robot.tannersCommands.TannersClimberStop;
+import frc.robot.tannersSubsystem.TannersClimberSubsystem;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Hood;
@@ -47,17 +51,20 @@ public class RobotContainer {
     private final Climber climber = new Climber();
     private final Limelight limelight = new Limelight("limelight");
 
+    //tanners stuff cuz i coolio and stuff
+    private static final TannersClimberSubsystem m_climb = new TannersClimberSubsystem();
+
     private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
     
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController operator = new CommandXboxController(1);
 
-    private final AimAndDriveCommand aimAndDriveCommands = new AimAndDriveCommand(
+   /* private final AimAndDriveCommand aimAndDriveCommands = new AimAndDriveCommand(
         swerve,
         forwardInput,
         leftInput
      );
-     
+      */
     private final SubsystemCommands subsystemCommands = new SubsystemCommands(
         swerve,
         intake,
@@ -73,17 +80,18 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
       
-       // Subsystem initialization
-        swerve = new Swerve();
-        intake = new Intake();
+       //Subsystem initialization
+       //swerve = new Swerve();
+       //intake = new Intake();
         
-
-      
 
         // Register Named Commands
         NamedCommands.registerCommand("intake", intake.intakeCommand());
-        NamedCommands.registerCommand("aimAndShoot", subsystemCommands.aimAndDriveCommand());
-        NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+        NamedCommands.registerCommand("climberRetract", climber.positionCommand(null));
+        NamedCommands.registerCommand("climberExtend", climber.positionCommand(null));
+        //NamedCommands.registerCommand("",  );
+       /// NamedCommands.registerCommand("aimAndShoot", subsystemCommands.aimAndDriveCommand());
+       //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
         configureBindings();
        //  autoRoutines.configure();
@@ -103,12 +111,14 @@ public class RobotContainer {
         configureManualDriveBindings();
         limelight.setDefaultCommand(updateVisionCommand());
 
-        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
+        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop());
 
-           .onTrue(intake.homingCommand());
-           //.onTrue(climber.homingCommand());
+          //.onTrue(climber.homingCommand())
+          //.onTrue(intake.homingCommand());
+           
 
-       // driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
+        driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
+        driver.rightBumper().whileTrue(subsystemCommands.shootManually());
         operator.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
         operator.rightBumper().whileTrue(subsystemCommands.shootManually());
 
@@ -117,6 +127,10 @@ public class RobotContainer {
 
         //operator.povUp().onTrue(climber.positionCommand(Climber.Position.HANGING));
         //operator.povDown().onTrue(climber.positionCommand(Climber.Position.HUNG));
+        operator.povUp().whileTrue(new TannersClimberExtend(m_climb));
+        operator.povUp().whileFalse(new TannersClimberStop(m_climb));
+        operator.povDown().whileTrue(new TannersClimberRetract(m_climb));
+        operator.povDown().whileFalse(new TannersClimberStop(m_climb));
     }
 
     private void configureManualDriveBindings() {

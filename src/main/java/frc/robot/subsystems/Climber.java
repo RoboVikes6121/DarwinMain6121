@@ -35,7 +35,7 @@ import frc.robot.Ports;
 
 public class Climber extends SubsystemBase {
     public enum Position {
-        HOMED(3),
+        HOMED(1),
         EXTEND_HOPPER(2),
         HANGING(6),
         HUNG(0.2);
