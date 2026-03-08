@@ -74,7 +74,7 @@ public final class SubsystemCommands {
         final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(launcher, hood, () -> swerve.getState().Pose);
         return Commands.parallel(
             aimAndDriveCommand,
-            Commands.waitSeconds(0.25)
+            Commands.waitSeconds(.25)
                 .andThen(prepareShotCommand),
             Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
             //Commands.waitSeconds(5)

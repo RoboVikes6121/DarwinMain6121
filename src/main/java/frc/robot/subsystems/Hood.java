@@ -23,7 +23,7 @@ public class Hood extends SubsystemBase {
     private static final LinearVelocity kMaxServoSpeed = Millimeters.of(20).per(Second);
     private static final double kMinPosition = 0.01;
     private static final double kMaxPosition = 0.77;
-    private static final double kPositionTolerance = 0.01;
+    private static final double kPositionTolerance = 0.001;
 
     private final Servo leftServo;
     private final Servo rightServo;

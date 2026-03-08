@@ -35,7 +35,7 @@ import frc.robot.Ports;
 public class Intake extends SubsystemBase {
     public enum Speed {
         STOP(0),
-        INTAKE(0.55);
+        INTAKE(0.4);
 
         private final double percentOutput;
 
@@ -52,7 +52,7 @@ public class Intake extends SubsystemBase {
         HOMED(0),
         STOWED(-2),
         INTAKE(-12),
-        AGITATE(-4);
+        AGITATE(-6.5);
 
         private final double degrees;
 
@@ -67,7 +67,7 @@ public class Intake extends SubsystemBase {
 
     private static final double kPivotReduction = 50.0;
     private static final AngularVelocity kMaxPivotSpeed = KrakenX60.kFreeSpeed.div(kPivotReduction);
-    private static final Angle kPositionTolerance = Degrees.of(1);
+    private static final Angle kPositionTolerance = Degrees.of(2);
 
     private final TalonFX pivotMotor, rollerMotor;
     private final VoltageOut pivotVoltageRequest = new VoltageOut(0);

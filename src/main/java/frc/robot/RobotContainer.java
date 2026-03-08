@@ -8,9 +8,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import java.util.Optional;
 
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -136,7 +133,7 @@ public class RobotContainer {
         driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
         driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
         driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
-        driver.povRight().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+        driver.leftTrigger().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
     }
 
     private Command updateVisionCommand() {
