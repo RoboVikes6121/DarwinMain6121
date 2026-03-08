@@ -8,14 +8,19 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import java.util.Optional;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Driving;
+import frc.robot.commands.AutoRoutines;
 import frc.robot.commands.AimAndDriveCommand;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.commands.SubsystemCommands;
@@ -32,8 +37,6 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import frc.robot.util.SwerveTelemetry;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,20 +54,22 @@ public class RobotContainer {
     private final Climber climber = new Climber();
     private final Limelight limelight = new Limelight("limelight");
 
-    //tanners stuff cuz i coolio and stuff
+    //tanners stuff cuz i am coolio and stuff
     private static final TannersClimberSubsystem m_climb = new TannersClimberSubsystem();
-
     private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
-    
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController operator = new CommandXboxController(1);
 
-   /* private final AimAndDriveCommand aimAndDriveCommands = new AimAndDriveCommand(
+    private final AutoRoutines autoRoutines = new AutoRoutines(
         swerve,
-        forwardInput,
-        leftInput
-     );
-      */
+        intake,
+        hopper,
+        verticalfeeder,
+        launcher,
+        hood,
+        climber,
+        limelight
+    );
     private final SubsystemCommands subsystemCommands = new SubsystemCommands(
         swerve,
         intake,
@@ -79,22 +84,8 @@ public class RobotContainer {
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-      
-       //Subsystem initialization
-       //swerve = new Swerve();
-       //intake = new Intake();
-        
-
-        // Register Named Commands
-        NamedCommands.registerCommand("intake", intake.intakeCommand());
-        NamedCommands.registerCommand("climberRetract", climber.positionCommand(null));
-        NamedCommands.registerCommand("climberExtend", climber.positionCommand(null));
-        //NamedCommands.registerCommand("",  );
-       /// NamedCommands.registerCommand("aimAndShoot", subsystemCommands.aimAndDriveCommand());
-       //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
-
         configureBindings();
-       //  autoRoutines.configure();
+        autoRoutines.configure();
         swerve.registerTelemetry(swerveTelemetry::telemeterize);
     }
     
@@ -111,11 +102,11 @@ public class RobotContainer {
         configureManualDriveBindings();
         limelight.setDefaultCommand(updateVisionCommand());
 
-        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop());
+        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
 
           //.onTrue(climber.homingCommand())
-          //.onTrue(intake.homingCommand());
-           
+         .onTrue(intake.homingCommand())
+           ;
 
         driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
         driver.rightBumper().whileTrue(subsystemCommands.shootManually());

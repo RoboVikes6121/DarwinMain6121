@@ -5,8 +5,9 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-
-import edu.wpi.first.math.Matrix;
+import choreo.Choreo.TrajectoryLogger;
+import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,8 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.TunerConstants;
-import frc.robot.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.generated.TunerConstants;
+import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
@@ -47,14 +48,14 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         );
     }
 
-    /**
+  /**
      * Creates a new auto factory for this drivetrain.
      *
      * @return AutoFactory for this drivetrain
      */
-    //public AutoFactory createAutoFactory() {
-    //    return createAutoFactory((sample, isStart) -> {});
-   // }
+    public AutoFactory createAutoFactory() {
+        return createAutoFactory((sample, isStart) -> {});
+ }
 
     /**
      * Creates a new auto factory for this drivetrain with the given
@@ -62,7 +63,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      *
      * @param trajLogger Logger for the trajectory
      * @return AutoFactory for this drivetrain
-     *
+     */
     public AutoFactory createAutoFactory(TrajectoryLogger<SwerveSample> trajLogger) {
         return new AutoFactory(
             () -> getState().Pose,
@@ -73,7 +74,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             trajLogger
         );
     }
-    */
+
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
      *
@@ -88,7 +89,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      * Follows the given field-centric path sample with PID.
      *
      * @param sample Sample along the path to follow
-     
+     */
     public void followPath(SwerveSample sample) {
         pathThetaController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -111,7 +112,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 .withWheelForceFeedforwardsY(sample.moduleForcesY())
         );
     }
-*/
+
     @Override
     public void periodic() {
         /*
@@ -168,5 +169,5 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
-    }
+    }   
 }

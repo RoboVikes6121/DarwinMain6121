@@ -35,7 +35,7 @@ import frc.robot.Ports;
 public class Intake extends SubsystemBase {
     public enum Speed {
         STOP(0),
-        INTAKE(0.5);
+        INTAKE(0.55);
 
         private final double percentOutput;
 
@@ -49,10 +49,10 @@ public class Intake extends SubsystemBase {
     }
 
     public enum Position {
-        HOMED(115),
-        STOWED(110),
-        INTAKE(100),
-        AGITATE(100);
+        HOMED(0),
+        STOWED(-2),
+        INTAKE(-12),
+        AGITATE(-4);
 
         private final double degrees;
 
@@ -67,7 +67,7 @@ public class Intake extends SubsystemBase {
 
     private static final double kPivotReduction = 50.0;
     private static final AngularVelocity kMaxPivotSpeed = KrakenX60.kFreeSpeed.div(kPivotReduction);
-    private static final Angle kPositionTolerance = Degrees.of(5);
+    private static final Angle kPositionTolerance = Degrees.of(1);
 
     private final TalonFX pivotMotor, rollerMotor;
     private final VoltageOut pivotVoltageRequest = new VoltageOut(0);
@@ -110,7 +110,7 @@ public class Intake extends SubsystemBase {
             )
             .withSlot0(
                 new Slot0Configs()
-                    .withKP(300)
+                    .withKP(175)
                     .withKI(0)
                     .withKD(0)
                     .withKV(12.0 / kMaxPivotSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
@@ -178,8 +178,10 @@ public class Intake extends SubsystemBase {
                 Commands.sequence(
                     runOnce(() -> set(Position.AGITATE)),
                     Commands.waitUntil(this::isPositionWithinTolerance),
+                    Commands.waitSeconds(.25),
                     runOnce(() -> set(Position.INTAKE)),
-                    Commands.waitUntil(this::isPositionWithinTolerance)
+                    Commands.waitUntil(this::isPositionWithinTolerance),
+                    Commands.waitSeconds(1)
                 )
                 .repeatedly()
             )
@@ -191,8 +193,8 @@ public class Intake extends SubsystemBase {
 
     public Command homingCommand() {
         return Commands.sequence(
-            runOnce(() -> setPivotPercentOutput(0.1)),
-            Commands.waitUntil(() -> pivotMotor.getSupplyCurrent().getValue().in(Amps) > 6),
+            runOnce(() -> setPivotPercentOutput(0.2)),
+            
             runOnce(() -> {
                 pivotMotor.setPosition(Position.HOMED.angle());
                 isHomed = true;
