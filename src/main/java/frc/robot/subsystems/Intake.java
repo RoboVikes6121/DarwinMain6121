@@ -191,6 +191,10 @@ public class Intake extends SubsystemBase {
             });
     }
 
+    public Command stowCommand() {
+        return runOnce(() -> set(Position.STOWED));
+    }
+
     public Command homingCommand() {
         return Commands.sequence(
             runOnce(() -> setPivotPercentOutput(0.2)),

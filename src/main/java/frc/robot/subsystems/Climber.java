@@ -35,8 +35,8 @@ import frc.robot.Ports;
 
 public class Climber extends SubsystemBase {
     public enum Position {
-        HOMED(1),
-        EXTEND_HOPPER(2),
+        HOMED(0),
+        EXTEND_HOPPER(1),
         HANGING(6),
         HUNG(0.2);
 
@@ -116,12 +116,13 @@ public class Climber extends SubsystemBase {
     public Command homingCommand() {
         return Commands.sequence(
             runOnce(() -> setPercentOutput(-0.05)),
-            Commands.waitUntil(() -> motor.getSupplyCurrent().getValue().in(Amps) > 0.4),
+            //Commands.waitUntil(() -> motor.getSupplyCurrent().getValue().in(Amps) > 0.4),
             runOnce(() -> {
                 motor.setPosition(Position.HOMED.motorAngle());
                 isHomed = true;
                 set(Position.EXTEND_HOPPER);
             })
+            
         )
         .unless(() -> isHomed)
         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);

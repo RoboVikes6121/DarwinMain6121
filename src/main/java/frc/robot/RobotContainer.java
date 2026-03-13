@@ -107,7 +107,7 @@ public class RobotContainer {
 
         RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
 
-         //.onTrue(climber.TannersClimberExtend().withTimeout(.25))
+         .onTrue(climber.homingCommand())
          .onTrue(intake.homingCommand())
            ;
 
@@ -125,6 +125,11 @@ public class RobotContainer {
         operator.povUp().whileFalse(new TannersClimberStop(m_climb));
         operator.povDown().whileTrue(new TannersClimberRetract(m_climb));
         operator.povDown().whileFalse(new TannersClimberStop(m_climb));
+
+        driver.povUp().whileTrue(new TannersClimberExtend(m_climb));
+        driver.povUp().whileFalse(new TannersClimberStop(m_climb));
+        driver.povDown().whileTrue(new TannersClimberRetract(m_climb));
+        driver.povDown().whileFalse(new TannersClimberStop(m_climb));
     }
 
     private void configureManualDriveBindings() {

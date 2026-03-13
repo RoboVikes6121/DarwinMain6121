@@ -1,15 +1,19 @@
 package frc.robot.tannersSubsystem;
 
+import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
 
@@ -20,6 +24,7 @@ public class TannersClimberSubsystem extends SubsystemBase{
   CurrentLimitsConfigs climbCurrentLimits = new CurrentLimitsConfigs();
 
   private final PositionVoltage m_request = new PositionVoltage(0);
+  private final VoltageOut climberVoltageRequest = new VoltageOut(0);
 
 
     public TannersClimberSubsystem() {
@@ -56,6 +61,7 @@ public class TannersClimberSubsystem extends SubsystemBase{
 
   }
 
+
     @Override
   public void periodic() {
 
@@ -65,6 +71,8 @@ public class TannersClimberSubsystem extends SubsystemBase{
 
     m_climb.setVoltage(20);
   }
+
+
 
     public void climbRetract() {
 

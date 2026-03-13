@@ -24,12 +24,33 @@ public record ChoreoTraj(
     Pose2d initialPoseBlue,
     Pose2d endPoseBlue
 ) {
-    public static final ChoreoTraj meter_auto = new ChoreoTraj(
-	    "meter_auto",
+    public static final ChoreoTraj backup_to_shoot = new ChoreoTraj(
+	    "backup_to_shoot",
 	    OptionalInt.empty(),
-	    1.07934,
-	    new Pose2d(3.657, 6.064, Rotation2d.fromRadians(-3.135)),
-	    new Pose2d(1.039, 5.979, Rotation2d.fromRadians(3.142))
+	    3.10086,
+	    new Pose2d(2.225, 5.966, Rotation2d.fromRadians(3.114)),
+	    new Pose2d(2.261, 4.086, Rotation2d.fromRadians(0.041))
+	);
+	public static final ChoreoTraj Floorballs_backup = new ChoreoTraj(
+	    "Floorballs_backup",
+	    OptionalInt.empty(),
+	    2.09867,
+	    new Pose2d(1.162, 6.018, Rotation2d.fromRadians(3.071)),
+	    new Pose2d(2.261, 5.966, Rotation2d.fromRadians(3.137))
+	);
+	public static final ChoreoTraj meter_auto2 = new ChoreoTraj(
+	    "meter_auto2",
+	    OptionalInt.empty(),
+	    3.77592,
+	    new Pose2d(2.442, 4.505, Rotation2d.fromRadians(-0.314)),
+	    new Pose2d(1.012, 3.746, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj Start_to_floorballs = new ChoreoTraj(
+	    "Start_to_floorballs",
+	    OptionalInt.empty(),
+	    1.75773,
+	    new Pose2d(2.414, 6.025, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(0.871, 5.989, Rotation2d.fromRadians(-3.012))
 	);
 
     /**
@@ -37,7 +58,10 @@ public record ChoreoTraj(
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-    	Map.entry("meter_auto", meter_auto)
+    	Map.entry("backup_to_shoot", backup_to_shoot),
+		Map.entry("Floorballs_backup", Floorballs_backup),
+		Map.entry("meter_auto2", meter_auto2),
+		Map.entry("Start_to_floorballs", Start_to_floorballs)
     );
 
     /**

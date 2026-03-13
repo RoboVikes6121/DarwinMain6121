@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
-import static frc.robot.generated.ChoreoTraj.meter_auto;
+import static frc.robot.generated.ChoreoTraj.Floorballs_backup;
+import static frc.robot.generated.ChoreoTraj.backup_to_shoot;
+import static frc.robot.generated.ChoreoTraj.Start_to_floorballs;
+
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -12,8 +15,11 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.subsystems.VerticalFeeder;
+import frc.robot.tannersCommands.TannersClimberExtend;
+import frc.robot.tannersSubsystem.TannersClimberSubsystem;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Hood;
@@ -21,6 +27,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
+import frc.robot.tannersSubsystem.TannersClimberSubsystem;
 
 public final class AutoRoutines {
     private final Swerve swerve;
@@ -70,22 +77,37 @@ public final class AutoRoutines {
 
     private AutoRoutine outpostAndDepotRoutine() {
         final AutoRoutine routine = autoFactory.newRoutine("meter_auto");
-        final AutoTrajectory startToOutpost = meter_auto.asAutoTraj(routine);
+        final AutoTrajectory startToOutpost = Start_to_floorballs.asAutoTraj(routine);
+        final AutoTrajectory outpostBackup = Floorballs_backup.asAutoTraj(routine);
+        final AutoTrajectory backupToShoot = backup_to_shoot.asAutoTraj(routine);
+
+        
 
 
         routine.active().onTrue(
             Commands.sequence(
+                
                 startToOutpost.resetOdometry(),
                 startToOutpost.cmd()
             )
         );
         startToOutpost.done().onTrue(
             Commands.sequence(
-                intake.intakeCommand().withTimeout(2)
+                intake.intakeCommand().withTimeout(2),
+                intake.stowCommand(),
+                outpostBackup.resetOdometry(),
+                outpostBackup.cmd()
+
+            )
+        );
+        outpostBackup.done().onTrue(
+            Commands.sequence(
+                backupToShoot.resetOdometry(),
+                backupToShoot.cmd(),
+                subsystemCommands.aimAndShoot().withTimeout(15)
             )
         );
         //auto commands start here
-
      
         return routine;
     }
