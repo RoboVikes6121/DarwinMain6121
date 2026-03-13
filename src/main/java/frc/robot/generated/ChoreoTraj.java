@@ -52,6 +52,20 @@ public record ChoreoTraj(
 	    new Pose2d(2.414, 6.025, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(0.871, 5.989, Rotation2d.fromRadians(-3.012))
 	);
+	public static final ChoreoTraj over = new ChoreoTraj(
+	    "over",
+	    OptionalInt.empty(),
+	    3.11386,
+	    new Pose2d(3.407, 5.656, Rotation2d.fromRadians(-0.821)),
+	    new Pose2d(5.83, 5.656, Rotation2d.fromRadians(-0.804))
+	);
+	public static final ChoreoTraj gather_centerballs = new ChoreoTraj(
+	    "gather_centerballs",
+	    OptionalInt.empty(),
+	    7.6923,
+	    new Pose2d(5.83, 5.656, Rotation2d.fromRadians(-0.804)),
+	    new Pose2d(5.825, 5.651, Rotation2d.fromRadians(-2.38))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -61,7 +75,9 @@ public record ChoreoTraj(
     	Map.entry("backup_to_shoot", backup_to_shoot),
 		Map.entry("Floorballs_backup", Floorballs_backup),
 		Map.entry("meter_auto2", meter_auto2),
-		Map.entry("Start_to_floorballs", Start_to_floorballs)
+		Map.entry("Start_to_floorballs", Start_to_floorballs),
+		Map.entry("over", over),
+		Map.entry("gather_centerballs", gather_centerballs)
     );
 
     /**
