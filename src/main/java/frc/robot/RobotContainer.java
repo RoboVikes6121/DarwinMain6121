@@ -28,6 +28,7 @@ import frc.robot.subsystems.VerticalFeeder;
 import frc.robot.tannersCommands.TannersClimberExtend;
 import frc.robot.tannersCommands.TannersClimberRetract;
 import frc.robot.tannersCommands.TannersClimberStop;
+import frc.robot.tannersCommands.TannersPassingCommand;
 import frc.robot.tannersSubsystem.TannersClimberSubsystem;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Climber;
@@ -112,12 +113,17 @@ public class RobotContainer {
            ;
 
         driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        driver.rightBumper().whileTrue(subsystemCommands.shootManually());
+        driver.rightBumper().whileTrue(new TannersPassingCommand(launcher, hood));
+        driver.povRight().whileTrue(subsystemCommands.feed());
         operator.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        operator.rightBumper().whileTrue(subsystemCommands.shootManually());
+        operator.rightBumper().whileTrue(new TannersPassingCommand(launcher, hood));
+        operator.a().whileTrue(subsystemCommands.feed());
+
 
         operator.leftTrigger().whileTrue(intake.intakeCommand());
         operator.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+        driver.leftBumper().whileTrue(intake.intakeCommand());
+        driver.povLeft().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
 
         //operator.povUp().onTrue(climber.positionCommand(Climber.Position.HANGING));
         //operator.povDown().onTrue(climber.positionCommand(Climber.Position.HUNG));

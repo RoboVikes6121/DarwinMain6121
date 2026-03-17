@@ -31,12 +31,33 @@ public record ChoreoTraj(
 	    new Pose2d(2.225, 5.966, Rotation2d.fromRadians(3.114)),
 	    new Pose2d(2.261, 4.086, Rotation2d.fromRadians(0.041))
 	);
+	public static final ChoreoTraj backup_to_shoot_side = new ChoreoTraj(
+	    "backup_to_shoot_side",
+	    OptionalInt.empty(),
+	    1.98033,
+	    new Pose2d(2.225, 5.966, Rotation2d.fromRadians(3.114)),
+	    new Pose2d(3.127, 5.585, Rotation2d.fromRadians(-1.116))
+	);
+	public static final ChoreoTraj centerballs_back_to_hub = new ChoreoTraj(
+	    "centerballs_back_to_hub",
+	    OptionalInt.empty(),
+	    4.53461,
+	    new Pose2d(5.825, 5.651, Rotation2d.fromRadians(-2.38)),
+	    new Pose2d(2.756, 4.693, Rotation2d.fromRadians(-0.421))
+	);
 	public static final ChoreoTraj Floorballs_backup = new ChoreoTraj(
 	    "Floorballs_backup",
 	    OptionalInt.empty(),
-	    2.09867,
+	    1.8475,
 	    new Pose2d(1.162, 6.018, Rotation2d.fromRadians(3.071)),
-	    new Pose2d(2.261, 5.966, Rotation2d.fromRadians(3.137))
+	    new Pose2d(2.015, 6.001, Rotation2d.fromRadians(3.137))
+	);
+	public static final ChoreoTraj gather_centerballs = new ChoreoTraj(
+	    "gather_centerballs",
+	    OptionalInt.empty(),
+	    7.36949,
+	    new Pose2d(5.83, 5.656, Rotation2d.fromRadians(-0.804)),
+	    new Pose2d(5.825, 5.651, Rotation2d.fromRadians(-2.38))
 	);
 	public static final ChoreoTraj meter_auto2 = new ChoreoTraj(
 	    "meter_auto2",
@@ -45,13 +66,6 @@ public record ChoreoTraj(
 	    new Pose2d(2.442, 4.505, Rotation2d.fromRadians(-0.314)),
 	    new Pose2d(1.012, 3.746, Rotation2d.fromRadians(3.142))
 	);
-	public static final ChoreoTraj Start_to_floorballs = new ChoreoTraj(
-	    "Start_to_floorballs",
-	    OptionalInt.empty(),
-	    1.75773,
-	    new Pose2d(2.414, 6.025, Rotation2d.fromRadians(3.142)),
-	    new Pose2d(0.871, 5.989, Rotation2d.fromRadians(-3.012))
-	);
 	public static final ChoreoTraj over = new ChoreoTraj(
 	    "over",
 	    OptionalInt.empty(),
@@ -59,12 +73,26 @@ public record ChoreoTraj(
 	    new Pose2d(3.407, 5.656, Rotation2d.fromRadians(-0.821)),
 	    new Pose2d(5.83, 5.656, Rotation2d.fromRadians(-0.804))
 	);
-	public static final ChoreoTraj gather_centerballs = new ChoreoTraj(
-	    "gather_centerballs",
+	public static final ChoreoTraj skyballs_to_shoot = new ChoreoTraj(
+	    "skyballs_to_shoot",
 	    OptionalInt.empty(),
-	    7.6923,
-	    new Pose2d(5.83, 5.656, Rotation2d.fromRadians(-0.804)),
-	    new Pose2d(5.825, 5.651, Rotation2d.fromRadians(-2.38))
+	    3.6187,
+	    new Pose2d(0.871, 0.678, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(2.681, 3.403, Rotation2d.fromRadians(0.33))
+	);
+	public static final ChoreoTraj Start_to_floorballs = new ChoreoTraj(
+	    "Start_to_floorballs",
+	    OptionalInt.empty(),
+	    2.0681,
+	    new Pose2d(3.005, 6.033, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(0.871, 5.989, Rotation2d.fromRadians(3.139))
+	);
+	public static final ChoreoTraj start_to_skyballs = new ChoreoTraj(
+	    "start_to_skyballs",
+	    OptionalInt.empty(),
+	    1.90972,
+	    new Pose2d(1.782, 0.67, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(0.871, 0.678, Rotation2d.fromRadians(3.142))
 	);
 
     /**
@@ -73,11 +101,15 @@ public record ChoreoTraj(
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
     	Map.entry("backup_to_shoot", backup_to_shoot),
+		Map.entry("backup_to_shoot_side", backup_to_shoot_side),
+		Map.entry("centerballs_back_to_hub", centerballs_back_to_hub),
 		Map.entry("Floorballs_backup", Floorballs_backup),
+		Map.entry("gather_centerballs", gather_centerballs),
 		Map.entry("meter_auto2", meter_auto2),
-		Map.entry("Start_to_floorballs", Start_to_floorballs),
 		Map.entry("over", over),
-		Map.entry("gather_centerballs", gather_centerballs)
+		Map.entry("skyballs_to_shoot", skyballs_to_shoot),
+		Map.entry("Start_to_floorballs", Start_to_floorballs),
+		Map.entry("start_to_skyballs", start_to_skyballs)
     );
 
     /**

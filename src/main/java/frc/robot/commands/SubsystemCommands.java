@@ -2,9 +2,12 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import javax.sound.midi.Sequence;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.VerticalFeeder;
+import frc.robot.tannersCommands.TannersPassingCommand;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Hood;
@@ -82,18 +85,27 @@ public final class SubsystemCommands {
         );
     }
 
+    public Command pass() {
+            final TannersPassingCommand passCommand = new TannersPassingCommand(launcher, hood);
+            return Commands.parallel(
+                passCommand,
+                Commands.waitUntil(() -> passCommand.isReadyToShoot())
+                    .andThen(feed())
+        );
+    }
+
     public Command shootManually() {
         return launcher.dashboardSpinUpCommand()
             .andThen(feed())
             .handleInterrupt(() -> launcher.stop());
     }
 
-    private Command feed() {
+    public Command feed() {
         return Commands.sequence(
             Commands.waitSeconds(0.25),
             Commands.parallel(
                 verticalfeeder.feedCommand(),
-                Commands.waitSeconds(2)
+                Commands.waitSeconds(1.5)
                     .andThen(hopper.feedCommand().alongWith(intake.agitateCommand()))
             )
         );

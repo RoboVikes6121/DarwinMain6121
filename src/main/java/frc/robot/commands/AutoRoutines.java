@@ -8,6 +8,11 @@ import static frc.robot.generated.ChoreoTraj.Floorballs_backup;
 import static frc.robot.generated.ChoreoTraj.Start_to_floorballs;
 import static frc.robot.generated.ChoreoTraj.backup_to_shoot;
 import static frc.robot.generated.ChoreoTraj.over;
+import static frc.robot.generated.ChoreoTraj.gather_centerballs;
+import static frc.robot.generated.ChoreoTraj.centerballs_back_to_hub;
+import static frc.robot.generated.ChoreoTraj.start_to_skyballs;
+import static frc.robot.generated.ChoreoTraj.skyballs_to_shoot;
+import static frc.robot.generated.ChoreoTraj.backup_to_shoot_side;
 
 
 import choreo.auto.AutoChooser;
@@ -69,14 +74,55 @@ public final class AutoRoutines {
     public void configure() {
         autoChooser.addRoutine("DepoAuto", this::outpostAndDepotRoutine);
         autoChooser.addRoutine("over", this::overTheThing);
+        autoChooser.addRoutine("Outpost", this::outpost);
+        autoChooser.addRoutine("DepoSideShoot", this::depoSideShoot);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
 
+    private AutoRoutine depoSideShoot() {
+        final AutoRoutine routine = autoFactory.newRoutine("DepoSideShoot");
+        final AutoTrajectory startToDepo = Start_to_floorballs.asAutoTraj(routine);
+        final AutoTrajectory depoBackup = Floorballs_backup.asAutoTraj(routine);
+        final AutoTrajectory backupToShootSide = backup_to_shoot_side.asAutoTraj(routine);
+
+        
+
+
+        routine.active().onTrue(
+            Commands.sequence(
+                
+                startToDepo.resetOdometry(),
+                startToDepo.cmd()
+            )
+        );
+        startToDepo.done().onTrue(
+            Commands.sequence(
+                intake.intakeCommand().withTimeout(2),
+                intake.stowCommand(),
+                depoBackup.resetOdometry(),
+                depoBackup.cmd()
+
+            )
+        );
+        depoBackup.done().onTrue(
+            Commands.sequence(
+                backupToShootSide.resetOdometry(),
+                backupToShootSide.cmd(),
+                subsystemCommands.aimAndShoot().withTimeout(15)
+            )
+        );
+        //auto commands start here
+     
+        return routine;
+    }
+
+
+
     private AutoRoutine outpostAndDepotRoutine() {
         final AutoRoutine routine = autoFactory.newRoutine("DepoAuto");
-        final AutoTrajectory startToOutpost = Start_to_floorballs.asAutoTraj(routine);
-        final AutoTrajectory outpostBackup = Floorballs_backup.asAutoTraj(routine);
+        final AutoTrajectory startToDepo = Start_to_floorballs.asAutoTraj(routine);
+        final AutoTrajectory depoBackup = Floorballs_backup.asAutoTraj(routine);
         final AutoTrajectory backupToShoot = backup_to_shoot.asAutoTraj(routine);
 
         
@@ -85,20 +131,20 @@ public final class AutoRoutines {
         routine.active().onTrue(
             Commands.sequence(
                 
-                startToOutpost.resetOdometry(),
-                startToOutpost.cmd()
+                startToDepo.resetOdometry(),
+                startToDepo.cmd()
             )
         );
-        startToOutpost.done().onTrue(
+        startToDepo.done().onTrue(
             Commands.sequence(
                 intake.intakeCommand().withTimeout(2),
                 intake.stowCommand(),
-                outpostBackup.resetOdometry(),
-                outpostBackup.cmd()
+                depoBackup.resetOdometry(),
+                depoBackup.cmd()
 
             )
         );
-        outpostBackup.done().onTrue(
+        depoBackup.done().onTrue(
             Commands.sequence(
                 backupToShoot.resetOdometry(),
                 backupToShoot.cmd(),
@@ -113,6 +159,8 @@ public final class AutoRoutines {
     private AutoRoutine overTheThing() {
         final AutoRoutine routine = autoFactory.newRoutine("over");
         final AutoTrajectory centerBalls = over.asAutoTraj(routine);
+        final AutoTrajectory grabCenterBalls = gather_centerballs.asAutoTraj(routine);
+        final AutoTrajectory centerBallsToHub = centerballs_back_to_hub.asAutoTraj(routine);
 
             routine.active().onTrue(
             Commands.sequence(
@@ -124,11 +172,50 @@ public final class AutoRoutines {
         /*centerBalls.done().onTrue(
             Commands.parallel(
                 intake.intakeCommand().withTimeout(7.5),
-                grabCenterBalls.resetOdometry
+                grabCenterBalls.resetOdometry(),
                 grabCenterBalls.cmd()
+                    .andThen(intake.stowCommand())
             )
          );
+        grabCenterBalls.done().onTrue(
+            Commands.sequence(
+                centerBallsToHub.resetOdometry(),
+                centerBallsToHub.cmd()
+            )
+        );
+        centerBallsToHub.done().onTrue(
+            subsystemCommands.aimAndShoot()
+        );
         */
              return routine;
+    }
+
+    private AutoRoutine outpost() {
+        final AutoRoutine routine = autoFactory.newRoutine("outpost");
+        final AutoTrajectory startToOutpost = start_to_skyballs.asAutoTraj(routine);
+        final AutoTrajectory outpostToShoot = skyballs_to_shoot.asAutoTraj(routine);
+
+            routine.active().onTrue(
+            Commands.sequence(
+                
+                startToOutpost.resetOdometry(),
+                startToOutpost.cmd()
+            )
+        );
+        startToOutpost.done().onTrue(
+            Commands.sequence(
+                intake.intakeCommand().withTimeout(3),
+                outpostToShoot.resetOdometry(),
+                startToOutpost.cmd()
+            )
+        );
+        startToOutpost.done().onTrue(
+            Commands.sequence(
+                subsystemCommands.aimAndShoot()
+            )  
+        );
+
+
+    return routine;
     }
 }
