@@ -17,29 +17,23 @@ import frc.robot.Landmarks;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Launcher;
 
-public class TannersPassingCommand extends Command {
+public class TannersDefaultSpeedCommand extends Command {
 
     private final Launcher launcher;
-    private final Hood hood;
 
 
-    public TannersPassingCommand(Launcher launcher, Hood hood) {
+    public TannersDefaultSpeedCommand(Launcher launcher) {
         this.launcher = launcher;
-        this.hood = hood;
+    
         
-        addRequirements(launcher, hood);
-    }
-
-    public boolean isReadyToShoot() {
-        return launcher.isVelocityWithinTolerance() && hood.isPositionWithinTolerance();
+        addRequirements(launcher);
     }
 
 
 
     @Override
     public void execute() {
-        launcher.setRPM(3000);
-        hood.setPosition(.65);
+        launcher.setRPM(3150);
     }
 
     @Override

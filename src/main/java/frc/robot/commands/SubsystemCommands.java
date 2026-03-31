@@ -5,7 +5,10 @@ import java.util.function.DoubleSupplier;
 import javax.sound.midi.Sequence;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.subsystems.VerticalFeeder;
 import frc.robot.tannersCommands.TannersPassingCommand;
 import frc.robot.subsystems.Hopper;
@@ -15,7 +18,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 
-public final class SubsystemCommands {
+public final class SubsystemCommands extends SubsystemBase {
     private final Swerve swerve;
     private final Intake intake;
     private final Hopper hopper;
@@ -85,11 +88,19 @@ public final class SubsystemCommands {
         );
     }
 
+    public Command exhaust() {
+        return Commands.parallel(
+            intake.intakeOutCommand(),
+            Commands.waitSeconds(.5)
+                .andThen(hopper.feedOutCommand())
+        );
+    }
+
     public Command pass() {
             final TannersPassingCommand passCommand = new TannersPassingCommand(launcher, hood);
             return Commands.parallel(
                 passCommand,
-                Commands.waitUntil(() -> passCommand.isReadyToShoot())
+                Commands.waitSeconds(.75)
                     .andThen(feed())
         );
     }
@@ -105,8 +116,20 @@ public final class SubsystemCommands {
             Commands.waitSeconds(0.25),
             Commands.parallel(
                 verticalfeeder.feedCommand(),
-                Commands.waitSeconds(1.5)
+                Commands.waitSeconds(1)
                     .andThen(hopper.feedCommand().alongWith(intake.agitateCommand()))
+            )
+
+            
+        );
+    }
+
+    public Command feedOut() {
+        return Commands.sequence(
+            Commands.parallel(
+                verticalfeeder.feedOutCommand(),
+                Commands.waitSeconds(1)
+                    .andThen(hopper.feedOutCommand())
             )
         );
     }

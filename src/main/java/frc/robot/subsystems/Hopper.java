@@ -22,7 +22,8 @@ import frc.robot.Ports;
 public class Hopper extends SubsystemBase {
     public enum Speed {
         STOP(0),
-        FEED(0.7);//reduced from .83
+        FEED(0.7),//reduced from .83
+        FEEDOUT(-.25);
 
         private final double percentOutput;
 
@@ -68,6 +69,9 @@ public class Hopper extends SubsystemBase {
 
     public Command feedCommand() {
         return startEnd(() -> set(Speed.FEED), () -> set(Speed.STOP));
+    }
+    public Command feedOutCommand() {
+        return startEnd(() -> set(Speed.FEEDOUT), ()  -> set(Speed.STOP));
     }
 
     @Override
