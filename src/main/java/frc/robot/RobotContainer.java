@@ -25,13 +25,9 @@ import frc.robot.commands.AimAndDriveCommand;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.commands.SubsystemCommands;
 import frc.robot.subsystems.VerticalFeeder;
-import frc.robot.tannersCommands.TannersClimberExtend;
-import frc.robot.tannersCommands.TannersClimberRetract;
-import frc.robot.tannersCommands.TannersClimberStop;
 import frc.robot.tannersCommands.TannersDefaultSpeedCommand;
 import frc.robot.tannersCommands.TannersPassingCommand;
 import frc.robot.tannersCommands.TannersStopSpeedCommand;
-import frc.robot.tannersSubsystem.TannersClimberSubsystem;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Hood;
@@ -58,7 +54,6 @@ public class RobotContainer {
     private final Limelight limelight = new Limelight("limelight");
 
     //tanners stuff cuz i am coolio and stuff
-    private static final TannersClimberSubsystem m_climb = new TannersClimberSubsystem();
     private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController operator = new CommandXboxController(1);
@@ -110,19 +105,16 @@ public class RobotContainer {
 
         RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
 
-        // .onTrue(climber.homingCommand())
          .onTrue(intake.homingCommand())
-         //.onTrue(new TannersDefaultSpeedCommand(launcher))
-           ;
+         .onTrue(new TannersDefaultSpeedCommand(launcher))
+        ;
 
         //operator.y().onTrue(new TannersDefaultSpeedCommand(launcher));
         //operator.x().whileTrue(new TannersStopSpeedCommand(launcher));
 
-        driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
+       driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
         driver.rightBumper().whileTrue(subsystemCommands.pass());
         driver.povRight().whileTrue(subsystemCommands.feed());
-        //operator.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        //operator.rightBumper().whileTrue(new TannersPassingCommand(launcher, hood));
         operator.a().whileTrue(subsystemCommands.feed());
 
 
@@ -134,17 +126,6 @@ public class RobotContainer {
 
         operator.povDown().whileTrue(subsystemCommands.feedOut());
 
-        //operator.povUp().onTrue(climber.positionCommand(Climber.Position.HANGING));
-        //operator.povDown().onTrue(climber.positionCommand(Climber.Position.HUNG));
-        //operator.povUp().whileTrue(new TannersClimberExtend(m_climb));
-        operator.povUp().whileFalse(new TannersClimberStop(m_climb));
-        //operator.povDown().whileTrue(new TannersClimberRetract(m_climb));
-        operator.povDown().whileFalse(new TannersClimberStop(m_climb));
-
-        driver.povUp().whileTrue(new TannersClimberExtend(m_climb));
-        driver.povUp().whileFalse(new TannersClimberStop(m_climb));
-        driver.povDown().whileTrue(new TannersClimberRetract(m_climb));
-        driver.povDown().whileFalse(new TannersClimberStop(m_climb));
     }
 
     private void configureManualDriveBindings() {

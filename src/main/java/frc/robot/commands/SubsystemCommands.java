@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.subsystems.VerticalFeeder;
 import frc.robot.tannersCommands.TannersPassingCommand;
+import frc.robot.tannersCommands.TannersDefaultSpeedCommand;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Hood;
@@ -80,13 +81,27 @@ public final class SubsystemCommands extends SubsystemBase {
         final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(launcher, hood, () -> swerve.getState().Pose);
         return Commands.parallel(
             aimAndDriveCommand,
-            Commands.waitSeconds(.25)
-                .andThen(prepareShotCommand),
+            prepareShotCommand,
             Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
             //Commands.waitSeconds(5)
                 .andThen(feed())
         );
     }
+
+   /*  public Command aimAndShoot2() {
+        final AimAndDriveCommand aimAndDriveCommand = new AimAndDriveCommand(swerve, forwardInput, leftInput);
+        final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(launcher, hood, () -> swerve.getState().Pose);
+        final TannersDefaultSpeedCommand defaultSpeed = new TannersDefaultSpeedCommand(launcher);
+        return Commands.parallel(
+                    aimAndDriveCommand,
+                    prepareShotCommand,
+                    Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
+                        .andThen(feed())
+                )
+                .handleInterrupt((Runnable) defaultSpeed);
+            }
+        */
+    
 
     public Command exhaust() {
         return Commands.parallel(

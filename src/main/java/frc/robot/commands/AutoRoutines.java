@@ -9,7 +9,7 @@ import static frc.robot.generated.ChoreoTraj.Start_to_floorballs;
 import static frc.robot.generated.ChoreoTraj.backup_to_shoot;
 import static frc.robot.generated.ChoreoTraj.over_left;
 import static frc.robot.generated.ChoreoTraj.over_right;
-import static frc.robot.generated.ChoreoTraj.gather_centerballs_left;
+import static frc.robot.generated.ChoreoTraj.Left_Center_Auton;
 import static frc.robot.generated.ChoreoTraj.gather_centerballs_right;
 import static frc.robot.generated.ChoreoTraj.centerballs_back_to_hub_left;
 import static frc.robot.generated.ChoreoTraj.centerballs_back_to_hub_right;
@@ -243,31 +243,14 @@ public final class AutoRoutines {
 
     private AutoRoutine leftCenterAuton() {
         final AutoRoutine routine = autoFactory.newRoutine("leftCenterAuton");
-        final AutoTrajectory centerBallsLeft = over_left.asAutoTraj(routine);
-        final AutoTrajectory grabCenterBallsLeft = gather_centerballs_left.asAutoTraj(routine);
-        final AutoTrajectory centerBallsToHubLeft = centerballs_back_to_hub_left.asAutoTraj(routine);
+        final AutoTrajectory leftAuton = Left_Center_Auton.asAutoTraj(routine);
 
             routine.active().onTrue(
-            Commands.sequence(
-                
-                centerBallsLeft.resetOdometry(),
-                centerBallsLeft.cmd()
-            )
-        );
-        centerBallsLeft.done().onTrue(
             Commands.parallel(
-                grabCenterBallsLeft.resetOdometry().andThen(grabCenterBallsLeft.cmd()),
-                intake.intakeCommand().withTimeout(6)
+                leftAuton.resetOdometry().andThen(leftAuton.cmd()),
+                Commands.waitSeconds(1.5).andThen(intake.intakeCommand().withTimeout(5.5)),
+                Commands.waitSeconds(9.25).andThen(subsystemCommands.aimAndShoot())
             )
-         );
-        grabCenterBallsLeft.done().onTrue(
-            Commands.sequence(
-                centerBallsToHubLeft.resetOdometry(),
-                centerBallsToHubLeft.cmd()
-            )
-        );
-        centerBallsToHubLeft.done().onTrue(
-            subsystemCommands.aimAndShoot()
         );
         
              return routine;

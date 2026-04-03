@@ -41,9 +41,9 @@ public record ChoreoTraj(
 	public static final ChoreoTraj centerballs_back_to_hub_left = new ChoreoTraj(
 	    "centerballs_back_to_hub_left",
 	    OptionalInt.empty(),
-	    4.68379,
-	    new Pose2d(6.837, 5.643, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.963, 5.407, Rotation2d.fromRadians(-0.817))
+	    2.2534,
+	    new Pose2d(5.932, 5.62, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.48, 5.403, Rotation2d.fromRadians(-0.975))
 	);
 	public static final ChoreoTraj centerballs_back_to_hub_right = new ChoreoTraj(
 	    "centerballs_back_to_hub_right",
@@ -59,12 +59,12 @@ public record ChoreoTraj(
 	    new Pose2d(1.162, 6.018, Rotation2d.fromRadians(3.071)),
 	    new Pose2d(2.015, 6.001, Rotation2d.fromRadians(3.137))
 	);
-	public static final ChoreoTraj gather_centerballs_left = new ChoreoTraj(
-	    "gather_centerballs_left",
+	public static final ChoreoTraj Left_Center_Auton = new ChoreoTraj(
+	    "Left_Center_Auton",
 	    OptionalInt.empty(),
-	    6.02255,
-	    new Pose2d(5.83, 5.656, Rotation2d.fromRadians(0.011)),
-	    new Pose2d(6.241, 5.65, Rotation2d.fromRadians(-0.005))
+	    9.27475,
+	    new Pose2d(3.615, 5.62, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.864, 5.448, Rotation2d.fromRadians(-0.818))
 	);
 	public static final ChoreoTraj gather_centerballs_right = new ChoreoTraj(
 	    "gather_centerballs_right",
@@ -140,7 +140,7 @@ public record ChoreoTraj(
 		Map.entry("centerballs_back_to_hub_left", centerballs_back_to_hub_left),
 		Map.entry("centerballs_back_to_hub_right", centerballs_back_to_hub_right),
 		Map.entry("Floorballs_backup", Floorballs_backup),
-		Map.entry("gather_centerballs_left", gather_centerballs_left),
+		Map.entry("Left_Center_Auton", Left_Center_Auton),
 		Map.entry("gather_centerballs_right", gather_centerballs_right),
 		Map.entry("meter_auto2", meter_auto2),
 		Map.entry("outpost_to_depo", outpost_to_depo),
