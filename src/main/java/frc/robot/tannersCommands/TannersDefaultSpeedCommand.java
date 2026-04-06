@@ -33,7 +33,7 @@ public class TannersDefaultSpeedCommand extends Command {
 
     @Override
     public void execute() {
-        launcher.setRPM(2800);
+        launcher.setRPM(3150);
     }
 
     @Override
