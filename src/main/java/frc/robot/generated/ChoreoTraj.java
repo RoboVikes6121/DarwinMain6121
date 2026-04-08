@@ -59,19 +59,19 @@ public record ChoreoTraj(
 	    new Pose2d(1.162, 6.018, Rotation2d.fromRadians(3.071)),
 	    new Pose2d(2.015, 6.001, Rotation2d.fromRadians(3.137))
 	);
-	public static final ChoreoTraj Left_Center_Auton = new ChoreoTraj(
-	    "Left_Center_Auton",
-	    OptionalInt.empty(),
-	    9.27475,
-	    new Pose2d(3.615, 5.62, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.864, 5.448, Rotation2d.fromRadians(-0.818))
-	);
 	public static final ChoreoTraj gather_centerballs_right = new ChoreoTraj(
 	    "gather_centerballs_right",
 	    OptionalInt.empty(),
 	    6.06482,
 	    new Pose2d(5.83, 2.363, Rotation2d.fromRadians(0.011)),
 	    new Pose2d(6.241, 2.363, Rotation2d.fromRadians(-0.005))
+	);
+	public static final ChoreoTraj Left_Center_Auton = new ChoreoTraj(
+	    "Left_Center_Auton",
+	    OptionalInt.empty(),
+	    9.46364,
+	    new Pose2d(2.697, 5.634, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.276, 5.34, Rotation2d.fromRadians(-0.917))
 	);
 	public static final ChoreoTraj meter_auto2 = new ChoreoTraj(
 	    "meter_auto2",
@@ -129,6 +129,13 @@ public record ChoreoTraj(
 	    new Pose2d(3.658, 1.985, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(0.568, 0.613, Rotation2d.fromRadians(3.142))
 	);
+	public static final ChoreoTraj Left_Auton_Grab_More_Balls = new ChoreoTraj(
+	    "Left_Auton_Grab_More_Balls",
+	    OptionalInt.empty(),
+	    2.27348,
+	    new Pose2d(3.276, 5.34, Rotation2d.fromRadians(-0.917)),
+	    new Pose2d(5.859, 5.34, Rotation2d.fromRadians(-1.571))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -140,8 +147,8 @@ public record ChoreoTraj(
 		Map.entry("centerballs_back_to_hub_left", centerballs_back_to_hub_left),
 		Map.entry("centerballs_back_to_hub_right", centerballs_back_to_hub_right),
 		Map.entry("Floorballs_backup", Floorballs_backup),
-		Map.entry("Left_Center_Auton", Left_Center_Auton),
 		Map.entry("gather_centerballs_right", gather_centerballs_right),
+		Map.entry("Left_Center_Auton", Left_Center_Auton),
 		Map.entry("meter_auto2", meter_auto2),
 		Map.entry("outpost_to_depo", outpost_to_depo),
 		Map.entry("over_left", over_left),
@@ -149,7 +156,8 @@ public record ChoreoTraj(
 		Map.entry("skyballs_to_shoot", skyballs_to_shoot),
 		Map.entry("Start_to_floorballs", Start_to_floorballs),
 		Map.entry("start_to_skyballs", start_to_skyballs),
-		Map.entry("start_to_skyballs_from_bump", start_to_skyballs_from_bump)
+		Map.entry("start_to_skyballs_from_bump", start_to_skyballs_from_bump),
+		Map.entry("Left_Auton_Grab_More_Balls", Left_Auton_Grab_More_Balls)
     );
 
     /**

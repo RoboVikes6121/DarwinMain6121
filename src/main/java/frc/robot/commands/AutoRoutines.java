@@ -10,6 +10,7 @@ import static frc.robot.generated.ChoreoTraj.backup_to_shoot;
 import static frc.robot.generated.ChoreoTraj.over_left;
 import static frc.robot.generated.ChoreoTraj.over_right;
 import static frc.robot.generated.ChoreoTraj.Left_Center_Auton;
+import static frc.robot.generated.ChoreoTraj.Left_Auton_Grab_More_Balls;
 import static frc.robot.generated.ChoreoTraj.gather_centerballs_right;
 import static frc.robot.generated.ChoreoTraj.centerballs_back_to_hub_left;
 import static frc.robot.generated.ChoreoTraj.centerballs_back_to_hub_right;
@@ -244,14 +245,21 @@ public final class AutoRoutines {
     private AutoRoutine leftCenterAuton() {
         final AutoRoutine routine = autoFactory.newRoutine("leftCenterAuton");
         final AutoTrajectory leftAuton = Left_Center_Auton.asAutoTraj(routine);
+        final AutoTrajectory afterLeft = Left_Auton_Grab_More_Balls.asAutoTraj(routine);
 
             routine.active().onTrue(
             Commands.parallel(
                 leftAuton.resetOdometry().andThen(leftAuton.cmd()),
-                Commands.waitSeconds(1.5).andThen(intake.intakeCommand().withTimeout(5.5)),
-                Commands.waitSeconds(9.25).andThen(subsystemCommands.aimAndShoot())
+                Commands.waitSeconds(1.5).andThen(intake.intakeCommand().withTimeout(5.5))
+                
             )
         );
+    leftAuton.done().onTrue(
+                Commands.sequence(
+                    subsystemCommands.aimAndShoot().withTimeout(6),
+                    leftAuton.resetOdometry().andThen(afterLeft.cmd())
+                )
+            );
         
              return routine;
     }
