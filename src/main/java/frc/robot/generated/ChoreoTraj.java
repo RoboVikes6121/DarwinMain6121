@@ -136,6 +136,34 @@ public record ChoreoTraj(
 	    new Pose2d(3.276, 5.34, Rotation2d.fromRadians(-0.917)),
 	    new Pose2d(5.859, 5.34, Rotation2d.fromRadians(-1.571))
 	);
+	public static final ChoreoTraj Left2_Auton_Step1 = new ChoreoTraj(
+	    "Left2_Auton_Step1",
+	    OptionalInt.empty(),
+	    8.55234,
+	    new Pose2d(3.425, 5.75, Rotation2d.fromRadians(-0.524)),
+	    new Pose2d(3.276, 5.34, Rotation2d.fromRadians(-0.917))
+	);
+	public static final ChoreoTraj Left2_Auton_Step2 = new ChoreoTraj(
+	    "Left2_Auton_Step2",
+	    OptionalInt.empty(),
+	    7.48696,
+	    new Pose2d(3.276, 5.34, Rotation2d.fromRadians(-0.917)),
+	    new Pose2d(5.95, 5.164, Rotation2d.fromRadians(1.66))
+	);
+	public static final ChoreoTraj Right2_Auton_Step1 = new ChoreoTraj(
+	    "Right2_Auton_Step1",
+	    OptionalInt.empty(),
+	    8.75598,
+	    new Pose2d(3.425, 2.45, Rotation2d.fromRadians(0.524)),
+	    new Pose2d(3.276, 2.7, Rotation2d.fromRadians(0.917))
+	);
+	public static final ChoreoTraj Right2_Auton_Step2 = new ChoreoTraj(
+	    "Right2_Auton_Step2",
+	    OptionalInt.empty(),
+	    7.61165,
+	    new Pose2d(3.276, 2.7, Rotation2d.fromRadians(0.917)),
+	    new Pose2d(6.05, 3.2, Rotation2d.fromRadians(-1.902))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -157,7 +185,11 @@ public record ChoreoTraj(
 		Map.entry("Start_to_floorballs", Start_to_floorballs),
 		Map.entry("start_to_skyballs", start_to_skyballs),
 		Map.entry("start_to_skyballs_from_bump", start_to_skyballs_from_bump),
-		Map.entry("Left_Auton_Grab_More_Balls", Left_Auton_Grab_More_Balls)
+		Map.entry("Left_Auton_Grab_More_Balls", Left_Auton_Grab_More_Balls),
+		Map.entry("Left2_Auton_Step1", Left2_Auton_Step1),
+		Map.entry("Left2_Auton_Step2", Left2_Auton_Step2),
+		Map.entry("Right2_Auton_Step1", Right2_Auton_Step1),
+		Map.entry("Right2_Auton_Step2", Right2_Auton_Step2)
     );
 
     /**

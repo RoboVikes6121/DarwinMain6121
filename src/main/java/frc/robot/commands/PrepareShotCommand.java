@@ -87,4 +87,6 @@ public class PrepareShotCommand extends Command {
             this.hoodPosition = hoodPosition;
         }
     }
+
+    
 }
