@@ -106,7 +106,7 @@ public final class AutoRoutines {
         );
         rightDoubleAuton1.done().onTrue(
             Commands.sequence(
-                subsystemCommands.aimAndShoot().withTimeout(3.75),
+                subsystemCommands.aimAndShoot().withTimeout(4.25),
                 Commands.parallel(
                     rightDoubleAuton2.resetOdometry().andThen(rightDoubleAuton2.cmd()),
                     Commands.waitSeconds(1).andThen(intake.intakeCommand().withTimeout(7.75))
@@ -131,7 +131,7 @@ public final class AutoRoutines {
         );
         leftDoubleAuton1.done().onTrue(
             Commands.sequence(
-                subsystemCommands.aimAndShoot().withTimeout(3.75),
+                subsystemCommands.aimAndShoot().withTimeout(4.25),
                 Commands.parallel(
                     leftDoubleAuton2.resetOdometry().andThen(leftDoubleAuton2.cmd()),
                     Commands.waitSeconds(1).andThen(intake.intakeCommand().withTimeout(7.75))
@@ -146,7 +146,6 @@ public final class AutoRoutines {
     private AutoRoutine depoSideShoot() {
         final AutoRoutine routine = autoFactory.newRoutine("DepoSideShoot");
         final AutoTrajectory startToDepo = Start_to_floorballs.asAutoTraj(routine);
-        final AutoTrajectory depoBackup = Floorballs_backup.asAutoTraj(routine);
         final AutoTrajectory backupToShootSide = backup_to_shoot_side.asAutoTraj(routine);
 
         
@@ -162,16 +161,12 @@ public final class AutoRoutines {
         startToDepo.done().onTrue(
             Commands.sequence(
                 intake.intakeCommand().withTimeout(2),
-                intake.stowCommand(),
-                depoBackup.resetOdometry(),
-                depoBackup.cmd()
-
+                backupToShootSide.resetOdometry(),
+                backupToShootSide.cmd()
             )
         );
-        depoBackup.done().onTrue(
+        backupToShootSide.done().onTrue(
             Commands.sequence(
-                backupToShootSide.resetOdometry(),
-                backupToShootSide.cmd(),
                 subsystemCommands.aimAndShoot().withTimeout(15)
             )
         );
@@ -300,7 +295,6 @@ public final class AutoRoutines {
     private AutoRoutine leftCenterAuton() {
         final AutoRoutine routine = autoFactory.newRoutine("leftCenterAuton");
         final AutoTrajectory leftAuton = Left_Center_Auton.asAutoTraj(routine);
-        final AutoTrajectory afterLeft = Left_Auton_Grab_More_Balls.asAutoTraj(routine);
 
             routine.active().onTrue(
             Commands.parallel(
@@ -311,8 +305,7 @@ public final class AutoRoutines {
         );
     leftAuton.done().onTrue(
                 Commands.sequence(
-                    subsystemCommands.aimAndShoot().withTimeout(6),
-                    leftAuton.resetOdometry().andThen(afterLeft.cmd())
+                    subsystemCommands.aimAndShoot().withTimeout(6)
                 )
             );
         

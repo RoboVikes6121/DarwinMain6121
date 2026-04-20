@@ -65,7 +65,7 @@ public class Launcher extends SubsystemBase {
                 new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(Amps.of(120))
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(70))
+                    .withSupplyCurrentLimit(Amps.of(40))
                     .withSupplyCurrentLimitEnable(true)
             )
             .withSlot0(
@@ -95,6 +95,10 @@ public class Launcher extends SubsystemBase {
                     .withOutput(Volts.of(percentOutput * 12.0))
             );
         }
+    }
+
+    public void defaultSpeed() {
+        setRPM(1250);
     }
 
     public void stop() {

@@ -75,7 +75,7 @@ public class PrepareShotCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        launcher.stop();
+        launcher.defaultSpeed();
     }
 
     public static class Shot {

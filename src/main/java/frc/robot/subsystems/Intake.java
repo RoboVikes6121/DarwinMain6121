@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
     public enum Speed {
         STOP(0),
         INTAKE(0.7), //roller speed
-        INTAKEOUT(-0.7);
+        INTAKEOUT(-1.4);
 
 
         private final double percentOutput;
