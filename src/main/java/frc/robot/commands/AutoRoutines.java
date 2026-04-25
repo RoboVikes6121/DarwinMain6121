@@ -4,8 +4,9 @@
 
 package frc.robot.commands;
 
-import static frc.robot.generated.ChoreoTraj.Floorballs_backup;
+import static frc.robot.generated.ChoreoTraj.Floorballs_backup_getMore;
 import static frc.robot.generated.ChoreoTraj.Start_to_floorballs;
+import static frc.robot.generated.ChoreoTraj.Start_to_floorballs_also_know_as_outhouse_from_center;
 import static frc.robot.generated.ChoreoTraj.backup_to_shoot;
 import static frc.robot.generated.ChoreoTraj.over_left;
 import static frc.robot.generated.ChoreoTraj.over_right;
@@ -20,7 +21,6 @@ import static frc.robot.generated.ChoreoTraj.centerballs_back_to_hub_left;
 import static frc.robot.generated.ChoreoTraj.centerballs_back_to_hub_right;
 import static frc.robot.generated.ChoreoTraj.start_to_skyballs;
 import static frc.robot.generated.ChoreoTraj.skyballs_to_shoot;
-import static frc.robot.generated.ChoreoTraj.backup_to_shoot_side;
 import static frc.robot.generated.ChoreoTraj.start_to_skyballs_from_bump;
 import static frc.robot.generated.ChoreoTraj.outpost_to_depo;
 
@@ -83,10 +83,9 @@ public final class AutoRoutines {
 
     public void configure() {
         autoChooser.addRoutine("DepoAuto", this::depoAuton);
-        autoChooser.addRoutine("DepoAndOutpostAuto", this::depoAndOutpostAuton);
+        autoChooser.addRoutine("centerDepoAuton", this::depoAutonFromCenter);
         autoChooser.addRoutine("leftCenterAuton", this::leftCenterAuton);
         autoChooser.addRoutine("rightCenterAuton", this::rightCenterAuton);
-        autoChooser.addRoutine("DepoSideShoot", this::depoSideShoot);
         autoChooser.addRoutine("DoubleLeftAuton", this::doubleLeftAuton);
         autoChooser.addRoutine("DoubRightAuton", this::doubleRightAuton);
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -106,7 +105,7 @@ public final class AutoRoutines {
         );
         rightDoubleAuton1.done().onTrue(
             Commands.sequence(
-                subsystemCommands.aimAndShoot().withTimeout(4.25),
+                subsystemCommands.aimAndShoot().withTimeout(3.5),
                 Commands.parallel(
                     rightDoubleAuton2.resetOdometry().andThen(rightDoubleAuton2.cmd()),
                     Commands.waitSeconds(1).andThen(intake.intakeCommand().withTimeout(7.75))
@@ -114,6 +113,11 @@ public final class AutoRoutines {
             )
             
         ); 
+        rightDoubleAuton2.done().onTrue(
+            Commands.sequence(
+                subsystemCommands.aimAndShoot().withTimeout(10)
+            )
+        );
 
         return routine;
     }
@@ -126,65 +130,32 @@ public final class AutoRoutines {
         routine.active().onTrue(
             Commands.parallel(
                 leftDoubleAuton1.resetOdometry().andThen(leftDoubleAuton1.cmd()),
-                Commands.waitSeconds(1.5).andThen(intake.intakeCommand().withTimeout(6.75))
+                Commands.waitSeconds(1).andThen(intake.intakeCommand().withTimeout(5.5))
             )
         );
         leftDoubleAuton1.done().onTrue(
             Commands.sequence(
-                subsystemCommands.aimAndShoot().withTimeout(4.25),
+                subsystemCommands.aimAndShoot().withTimeout(3.5),
                 Commands.parallel(
                     leftDoubleAuton2.resetOdometry().andThen(leftDoubleAuton2.cmd()),
                     Commands.waitSeconds(1).andThen(intake.intakeCommand().withTimeout(7.75))
                 )
             )
-            
+        ); 
+        leftDoubleAuton2.done().onTrue(
+            Commands.sequence(
+                subsystemCommands.aimAndShoot().withTimeout(10)
+            )
         );
 
         return routine;
     }
-
-    private AutoRoutine depoSideShoot() {
-        final AutoRoutine routine = autoFactory.newRoutine("DepoSideShoot");
-        final AutoTrajectory startToDepo = Start_to_floorballs.asAutoTraj(routine);
-        final AutoTrajectory backupToShootSide = backup_to_shoot_side.asAutoTraj(routine);
-
-        
-
-
-        routine.active().onTrue(
-            Commands.sequence(
-                
-                startToDepo.resetOdometry(),
-                startToDepo.cmd()
-            )
-        );
-        startToDepo.done().onTrue(
-            Commands.sequence(
-                intake.intakeCommand().withTimeout(2),
-                backupToShootSide.resetOdometry(),
-                backupToShootSide.cmd()
-            )
-        );
-        backupToShootSide.done().onTrue(
-            Commands.sequence(
-                subsystemCommands.aimAndShoot().withTimeout(15)
-            )
-        );
-        //auto commands start here
-     
-        return routine;
-    }
-
-
 
     private AutoRoutine depoAuton() {
         final AutoRoutine routine = autoFactory.newRoutine("DepoAuto");
         final AutoTrajectory startToDepo = Start_to_floorballs.asAutoTraj(routine);
-        final AutoTrajectory depoBackup = Floorballs_backup.asAutoTraj(routine);
+        final AutoTrajectory depoGetMore = Floorballs_backup_getMore.asAutoTraj(routine);
         final AutoTrajectory backupToShoot = backup_to_shoot.asAutoTraj(routine);
-
-        
-
 
         routine.active().onTrue(
             Commands.sequence(
@@ -196,65 +167,64 @@ public final class AutoRoutines {
         startToDepo.done().onTrue(
             Commands.sequence(
                 intake.intakeCommand().withTimeout(2),
-                intake.stowCommand(),
-                depoBackup.resetOdometry(),
-                depoBackup.cmd()
+                depoGetMore.resetOdometry(),
+                depoGetMore.cmd()
 
             )
         );
-        depoBackup.done().onTrue(
+        depoGetMore.done().onTrue(
             Commands.sequence(
+                intake.intakeCommand().withTimeout(2),
                 backupToShoot.resetOdometry(),
-                backupToShoot.cmd(),
+                backupToShoot.cmd()
+            )
+        );
+        backupToShoot.done().onTrue(
+            Commands.sequence(
                 subsystemCommands.aimAndShoot().withTimeout(15)
             )
         );
+
         //auto commands start here
      
         return routine;
     }
 
-    private AutoRoutine depoAndOutpostAuton() {
-        final AutoRoutine routine = autoFactory.newRoutine("DepoAndOutpostAuto");
-        final AutoTrajectory startTOutpost = start_to_skyballs_from_bump.asAutoTraj(routine);
-        final AutoTrajectory outpostToDepo = outpost_to_depo.asAutoTraj(routine);
-        final AutoTrajectory depoBackup = Floorballs_backup.asAutoTraj(routine);
-        final AutoTrajectory backupToShoot = backup_to_shoot_side.asAutoTraj(routine);
+    private AutoRoutine depoAutonFromCenter() {
+        final AutoRoutine routine = autoFactory.newRoutine("DepoAuto");
+        final AutoTrajectory startToDepo = Start_to_floorballs_also_know_as_outhouse_from_center.asAutoTraj(routine);
+        final AutoTrajectory depoGetMore = Floorballs_backup_getMore.asAutoTraj(routine);
+        final AutoTrajectory backupToShoot = backup_to_shoot.asAutoTraj(routine);
 
         routine.active().onTrue(
-            Commands.parallel(
+            Commands.sequence(
                 
-                startTOutpost.resetOdometry().andThen(startTOutpost.cmd()),
-                intake.intakeCommand().withTimeout(3)
-                
+                startToDepo.resetOdometry(),
+                startToDepo.cmd()
             )
         );
-        startTOutpost.done().onTrue(
+        startToDepo.done().onTrue(
             Commands.sequence(
                 intake.intakeCommand().withTimeout(2),
-                Commands.parallel(outpostToDepo.resetOdometry().andThen(outpostToDepo.cmd()),
-                Commands.waitSeconds(3.5).andThen(
-                intake.intakeCommand().withTimeout(4))
-            )
-                
+                depoGetMore.resetOdometry(),
+                depoGetMore.cmd()
 
             )
         );
-        outpostToDepo.done().onTrue(
+        depoGetMore.done().onTrue(
             Commands.sequence(
-                intake.intakeCommand().withTimeout(1.25), 
-                depoBackup.resetOdometry(),
-                depoBackup.cmd()
+                intake.intakeCommand().withTimeout(2),
+                backupToShoot.resetOdometry(),
+                backupToShoot.cmd()
             )
         );
-        depoBackup.done().onTrue(
+        backupToShoot.done().onTrue(
             Commands.sequence(
-                backupToShoot.resetOdometry(),
-                backupToShoot.cmd(),
                 subsystemCommands.aimAndShoot().withTimeout(15)
             )
         );
-        
+
+        //auto commands start here
      
         return routine;
     }

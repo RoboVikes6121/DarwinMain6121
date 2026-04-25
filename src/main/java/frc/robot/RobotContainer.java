@@ -113,7 +113,7 @@ public class RobotContainer {
         //operator.x().whileTrue(new TannersStopSpeedCommand(launcher));
 
         driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
-        //driver.rightBumper().onTrue(new TannersDefaultSpeedCommand(launcher));
+        driver.y().onTrue(launcher.stopLauncherCommand());
         driver.rightBumper().whileTrue(subsystemCommands.pass());
         driver.povRight().whileTrue(subsystemCommands.feed());
         operator.a().whileTrue(subsystemCommands.feed());

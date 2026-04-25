@@ -35,8 +35,8 @@ import frc.robot.Ports;
 public class Intake extends SubsystemBase {
     public enum Speed {
         STOP(0),
-        INTAKE(0.7), //roller speed
-        INTAKEOUT(-1.4);
+        INTAKE(.7), //roller speed
+        INTAKEOUT(-.7);
 
 
         private final double percentOutput;
@@ -193,7 +193,7 @@ public class Intake extends SubsystemBase {
                     Commands.waitSeconds(.25),
                     runOnce(() -> set(Position.INTAKE)),
                     Commands.waitUntil(this::isPositionWithinTolerance),
-                    Commands.waitSeconds(1)
+                    Commands.waitSeconds(.25)
                 )
                 .repeatedly()
             )

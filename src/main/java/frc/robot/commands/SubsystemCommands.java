@@ -88,20 +88,6 @@ public final class SubsystemCommands extends SubsystemBase {
         );
     }
 
-   /*  public Command aimAndShoot2() {
-        final AimAndDriveCommand aimAndDriveCommand = new AimAndDriveCommand(swerve, forwardInput, leftInput);
-        final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(launcher, hood, () -> swerve.getState().Pose);
-        final TannersDefaultSpeedCommand defaultSpeed = new TannersDefaultSpeedCommand(launcher);
-        return Commands.parallel(
-                    aimAndDriveCommand,
-                    prepareShotCommand,
-                    Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
-                        .andThen(feed())
-                )
-                .handleInterrupt((Runnable) defaultSpeed);
-            }
-        */
-    
 
     public Command exhaust() {
         return Commands.parallel(
@@ -116,7 +102,7 @@ public final class SubsystemCommands extends SubsystemBase {
             return Commands.parallel(
                 passCommand,
                 Commands.waitSeconds(.75)
-                    .andThen(feed())
+                    .andThen(feedNoAgitate())
         );
     }
 
@@ -128,14 +114,22 @@ public final class SubsystemCommands extends SubsystemBase {
 
     public Command feed() {
         return Commands.sequence(
+            Commands.parallel(
+                verticalfeeder.feedCommand(),
+                Commands.waitSeconds(.5)
+                    .andThen(hopper.feedCommand().alongWith(intake.agitateCommand()))
+            )            
+        );
+    }
+
+    public Command feedNoAgitate() {
+        return Commands.sequence(
             Commands.waitSeconds(0.25),
             Commands.parallel(
                 verticalfeeder.feedCommand(),
                 Commands.waitSeconds(1)
-                    .andThen(hopper.feedCommand().alongWith(intake.agitateCommand()))
-            )
-
-            
+                    .andThen(hopper.feedCommand())
+            )            
         );
     }
 

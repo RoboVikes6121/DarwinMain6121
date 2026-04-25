@@ -23,7 +23,7 @@ public class Hopper extends SubsystemBase {
     public enum Speed {
         STOP(0),
         FEED(0.7),//reduced from .83
-        FEEDOUT(-.25);
+        FEEDOUT(-.5);
 
         private final double percentOutput;
 

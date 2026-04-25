@@ -28,7 +28,7 @@ import frc.robot.Constants.KrakenX60;
 import frc.robot.Ports;
 
 public class Launcher extends SubsystemBase {
-    private static final AngularVelocity kVelocityTolerance = RPM.of(50);
+    private static final AngularVelocity kVelocityTolerance = RPM.of(25);
 
     private final TalonFX leftMotor, middleMotor, rightMotor;
     private final List<TalonFX> motors;
@@ -103,6 +103,10 @@ public class Launcher extends SubsystemBase {
 
     public void stop() {
         setPercentOutput(0.0);
+    }
+
+    public Command stopLauncherCommand() {
+        return runOnce(() -> stop());
     }
 
     public Command spinUpCommand(double rpm) {
